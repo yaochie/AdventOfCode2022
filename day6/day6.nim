@@ -1,7 +1,4 @@
 import std/deques
-import std/intsets
-import std/packedsets
-import std/sets
 import std/enumerate
 
 let f = open("day6.txt")
