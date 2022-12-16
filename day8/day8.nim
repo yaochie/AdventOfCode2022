@@ -1,4 +1,3 @@
-import std/strutils
 import std/sugar
 import std/enumerate
 
