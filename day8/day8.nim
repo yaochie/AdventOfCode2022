@@ -1,5 +1,4 @@
-import std/sugar
-import std/enumerate
+import std/[enumerate, sugar]
 
 const W = 99
 const H = 99
@@ -57,8 +56,8 @@ proc isVisible(map: array[H, array[W, int]], i: int, j: int): bool =
 
 proc part1(map: array[H, array[W, int]]) =
   var numVisible = 0
-  for i in 1 ..< (H-1):
-    for j in 1 ..< (W-1):
+  for i in 1..<H-1:
+    for j in 1..<W-1:
       if isVisible(map, i, j):
         numVisible += 1
 
@@ -97,8 +96,8 @@ proc getScenicScore(map: array[H, array[W, int]], i: int, j: int): int =
 
 proc part2(map: array[H, array[W, int]]) =
   var maxScore = 0
-  for i in 0 ..< H:
-    for j in 0 ..< W:
+  for i in 0..<H:
+    for j in 0..<W:
       maxScore = max(maxScore, getScenicScore(map, i, j))
   
   echo maxScore

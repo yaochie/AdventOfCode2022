@@ -1,8 +1,4 @@
-import math
-import deques
-import sugar
-import strutils
-import algorithm
+import std/[algorithm, deques, math, strutils, sugar]
 
 var items: seq[seq[int]] = @[]
 var divs: seq[int] = @[]
@@ -15,7 +11,6 @@ let lines = collect(newSeq):
 # parse
 var i = 0
 while i < lines.len():
-  # let monkeyId = lines[i][7..^2]
   let monkeyItems = collect(newSeq):
     for i in lines[i+1][18..^1].split(", "): parseInt(i)
 

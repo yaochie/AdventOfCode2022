@@ -1,16 +1,15 @@
-import std/strutils
-import std/algorithm
+import std/[algorithm, strutils]
 
 let f = open("day1.txt")
 
 var calories: seq[int] = @[]
 var currCalories = 0
 for line in f.lines:
-    if line == "":
-        calories.add(currCalories)
-        currCalories = 0
-    else:
-        currCalories = currCalories + parseInt(line)
+  if line == "":
+    calories.add(currCalories)
+    currCalories = 0
+  else:
+    currCalories = currCalories + parseInt(line)
 
 calories.sort(order=SortOrder.Descending)
 echo calories[0]

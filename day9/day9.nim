@@ -1,7 +1,4 @@
-import strutils
-import strformat
-import sugar
-import sets
+import std/[sets, strformat, strutils, sugar]
 
 let inputLines = collect(newSeq):
   for line in lines("day9.txt"): line

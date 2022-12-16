@@ -1,7 +1,4 @@
-import math
-import strutils
-import sugar
-import sets
+import std/[math, sets, strutils, sugar]
 
 var x = 1
 var cycle = 1 

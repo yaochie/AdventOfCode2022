@@ -1,6 +1,4 @@
-import std/strutils
-import std/sugar
-import std/tables
+import std/[strutils, sugar, tables]
 
 type
   ItemType = enum Directory, File
@@ -70,17 +68,16 @@ proc getDirSize(dirName: string, allItems: var Table[string, Item]): int =
   if allitems[dirName].size > 0:
     return allitems[dirName].size
 
-  var dirSize = 0
+  result = 0
   for itemName in allitems[dirName].children:
     let item = allItems[itemName]
     if item.typ == File:
-      dirSize += item.size
+      result += item.size
     else:
-      dirSize += getDirSize(itemName, allItems)
+      result += getDirSize(itemName, allItems)
 
   # cache
-  allItems[dirName].size = dirSize
-  return dirSize
+  allItems[dirName].size = result
 
 proc part1(allItems: var Table[string, Item]) =
   var totalSize = 0

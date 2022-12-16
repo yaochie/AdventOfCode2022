@@ -1,6 +1,4 @@
-import tables
-import std/enumerate
-import deques
+import std/[enumerate, tables, deques]
 
 type
   Coord = tuple
