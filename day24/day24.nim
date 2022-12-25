@@ -1,4 +1,4 @@
-import std/[deques, enumerate, math, sets, sugar, tables]
+import std/[deques, enumerate, math, sets, sugar]
 
 type
   Blizzard = tuple[r, c, offR, offC: int]
@@ -58,22 +58,22 @@ proc getCurrPos(t: int, b: Blizzard): Coord =
   let newC = floorMod(b.c + t * b.offC - 1, width) + 1
   (newR, newC)
 
-proc getPos(t: int, blizPos: var Table[int, HashSet[Coord]]) =
-  var pos = initHashSet[Coord]()
+proc getPos(t: int): HashSet[Coord] =
+  result = initHashSet[Coord]()
   for b in blizzards.items:
-    pos.incl(getCurrPos(t, b))
-  blizPos[t] = pos
+    result.incl(getCurrPos(t, b))
 
 echo "============"
 var startpoint = (0, 1)
 var startTime = 0
 var toVisit: Deque[State] = [(0, 1, 0)].toDeque()
 var visited = initHashSet[State]()
-var blizPos = initTable[int, HashSet[Coord]]()
 
 # faster solution
-# cache blizzard locations for each time
+# cache blizzard locations
 # then can just do a lookup
+var blizPos = HashSet[Coord]()
+var blizT = 0
 
 while toVisit.len() > 0:
   let (r, c, t) = toVisit.popFirst()
@@ -89,6 +89,13 @@ while toVisit.len() > 0:
   if (r, c) == (0, 1):
     toVisit.addLast((r, c, t + 1))
 
+  if t == blizT:
+    # Calculate blizzard locations for next time step.
+    # Since we are doing BFS, we won't need the previous
+    # time steps' locations anymore.
+    blizPos = getPos(t + 1)
+    blizT = t + 1
+
   for offR, offC in offsets.items:
     let (newR, newC) = (r + offR, c + offC)
     if visited.contains((newR, newC, t + 1)):
@@ -100,15 +107,7 @@ while toVisit.len() > 0:
 
     # echo (newR, newC)
 
-    var collide = false
-    for b in blizzards.items:
-      let (blizR, blizC) = getCurrPos(t + 1, b)
-      # echo b, " | ", (blizR, blizC)
-      if newR == blizR and newC == blizC:
-        collide = true
-        break
-
-    if collide:
+    if blizPos.contains((newR, newC)):
       continue
 
     toVisit.addLast((newR, newC, t + 1))
@@ -133,6 +132,13 @@ while toVisit.len() > 0:
   if (r, c) == startpoint:
     toVisit.addLast((r, c, t + 1))
 
+  if t == blizT:
+    # Calculate blizzard locations for next time step.
+    # Since we are doing BFS, we won't need the previous
+    # time steps' locations anymore.
+    blizPos = getPos(t + 1)
+    blizT = t + 1
+
   for offR, offC in offsets.items:
     let (newR, newC) = (r + offR, c + offC)
     if visited.contains((newR, newC, t + 1)):
@@ -142,14 +148,7 @@ while toVisit.len() > 0:
     if newR < 1 or height < newR or newC < 1 or width < newC:
       continue
 
-    var collide = false
-    for b in blizzards.items:
-      let (blizR, blizC) = getCurrPos(t + 1, b)
-      if newR == blizR and newC == blizC:
-        collide = true
-        break
-
-    if collide:
+    if blizPos.contains((newR, newC)):
       continue
 
     toVisit.addLast((newR, newC, t + 1))
@@ -172,6 +171,13 @@ while toVisit.len() > 0:
   if (r, c) == startpoint:
     toVisit.addLast((r, c, t + 1))
 
+  if t == blizT:
+    # Calculate blizzard locations for next time step.
+    # Since we are doing BFS, we won't need the previous
+    # time steps' locations anymore.
+    blizPos = getPos(t + 1)
+    blizT = t + 1
+
   for offR, offC in offsets.items:
     let (newR, newC) = (r + offR, c + offC)
     if visited.contains((newR, newC, t + 1)):
@@ -181,14 +187,7 @@ while toVisit.len() > 0:
     if newR < 1 or height < newR or newC < 1 or width < newC:
       continue
 
-    var collide = false
-    for b in blizzards.items:
-      let (blizR, blizC) = getCurrPos(t + 1, b)
-      if newR == blizR and newC == blizC:
-        collide = true
-        break
-
-    if collide:
+    if blizPos.contains((newR, newC)):
       continue
 
     toVisit.addLast((newR, newC, t + 1))
